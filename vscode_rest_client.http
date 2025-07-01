@@ -1,0 +1,51 @@
+POST http://localhost:8080/api/v1/login
+content-type: application/json
+
+{
+    "email":"test3@test.com",
+    "password":"12345"
+}
+
+
+###
+
+GET http://localhost:8080/api/v1/category
+X-Authenticated-token: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIzIiwiYXV0aG9yaXRlcyI6W3siYXV0aG9yaXR5IjoiUk9MRV9BRE1JTiJ9LHsiYXV0aG9yaXR5IjoiUk9MRV9VU0VSIn1dLCJpYXQiOjE3MzcyOTEzOTMsImV4cCI6MTczNzI5MTk5M30.lmbI-LH46rpKOvp7dUBxmh-9gFAs0ZwOCMBio4wVs9orOaaD7fnH7l7Yho2rJKBfAFA-cWFyuJnhFLVLLah4tQ
+
+###
+
+GET http://localhost:8080/api/v1/category/1
+X-Authenticated-token: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIzIiwiYXV0aG9yaXRlcyI6W3siYXV0aG9yaXR5IjoiUk9MRV9BRE1JTiJ9LHsiYXV0aG9yaXR5IjoiUk9MRV9VU0VSIn1dLCJpYXQiOjE3MzcyOTEzOTMsImV4cCI6MTczNzI5MTk5M30.lmbI-LH46rpKOvp7dUBxmh-9gFAs0ZwOCMBio4wVs9orOaaD7fnH7l7Yho2rJKBfAFA-cWFyuJnhFLVLLah4tQ
+
+###
+POST http://localhost:8080/api/v1/category
+content-type: application/json
+X-Authenticated-token: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIzIiwiYXV0aG9yaXRlcyI6W3siYXV0aG9yaXR5IjoiUk9MRV9BRE1JTiJ9LHsiYXV0aG9yaXR5IjoiUk9MRV9VU0VSIn1dLCJpYXQiOjE3MzcyOTEzOTMsImV4cCI6MTczNzI5MTk5M30.lmbI-LH46rpKOvp7dUBxmh-9gFAs0ZwOCMBio4wVs9orOaaD7fnH7l7Yho2rJKBfAFA-cWFyuJnhFLVLLah4tQ
+
+{
+    "categoryCd": 999,
+    "categoryNm": "テストカテゴリー",
+    "categoryType": "1",
+    "displayOrder": 999,
+    "fixedCategoryFlg": "0"
+}
+
+###
+
+PUT http://localhost:8080/api/v1/category/999
+content-type: application/json
+X-Authenticated-token: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIzIiwiYXV0aG9yaXRlcyI6W3siYXV0aG9yaXR5IjoiUk9MRV9BRE1JTiJ9LHsiYXV0aG9yaXR5IjoiUk9MRV9VU0VSIn1dLCJpYXQiOjE3MzcyOTEzOTMsImV4cCI6MTczNzI5MTk5M30.lmbI-LH46rpKOvp7dUBxmh-9gFAs0ZwOCMBio4wVs9orOaaD7fnH7l7Yho2rJKBfAFA-cWFyuJnhFLVLLah4tQ
+
+{
+    "categoryNm": "テストカテゴリーUpd2",
+    "categoryType": "1",
+    "displayOrder": 999,
+    "fixedCategoryFlg": "0"
+}
+
+###
+
+DELETE http://localhost:8080/api/v1/category/999
+X-Authenticated-token: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIzIiwiYXV0aG9yaXRlcyI6W3siYXV0aG9yaXR5IjoiUk9MRV9BRE1JTiJ9LHsiYXV0aG9yaXR5IjoiUk9MRV9VU0VSIn1dLCJpYXQiOjE3MzcyOTEzOTMsImV4cCI6MTczNzI5MTk5M30.lmbI-LH46rpKOvp7dUBxmh-9gFAs0ZwOCMBio4wVs9orOaaD7fnH7l7Yho2rJKBfAFA-cWFyuJnhFLVLLah4tQ
+
+
