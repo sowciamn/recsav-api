@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sowciamn.recsav.repository.CategoryMapper">
+
+    <select id="findAll" resultType="com.sowciamn.recsav.model.entity.Category">
+        SELECT
+            category_cd,
+            category_nm,
+            category_type,
+            display_order
+        FROM
+            category
+        ORDER BY
+            display_order, category_cd;
+    </select>
+
+    <select id="findById" resultType="com.sowciamn.recsav.model.entity.Category">
+        SELECT
+            category_cd,
+            category_nm,
+            category_type,
+            display_order
+        FROM
+            category
+        WHERE
+            category_cd = #{categoryCd};
+    </select>
+
+    <insert id="insert" parameterType="com.sowciamn.recsav.model.entity.Category" useGeneratedKeys="true" keyProperty="categoryCd">
+        INSERT INTO category (
+            category_nm,
+            category_type,
+            display_order
+        ) VALUES (
+            #{categoryNm},
+            #{categoryType},
+            #{displayOrder}
+        );
+    </insert>
+
+    <update id="update" parameterType="com.sowciamn.recsav.model.entity.Category">
+        UPDATE
+            category
+        SET
+            category_nm = #{categoryNm},
+            category_type = #{categoryType},
+            display_order = #{displayOrder}
+        WHERE
+            category_cd = #{categoryCd};
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM
+            category
+        WHERE
+            category_cd = #{categoryCd};
+    </delete>
+
+</mapper>
