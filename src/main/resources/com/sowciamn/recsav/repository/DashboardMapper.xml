@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sowciamn.recsav.repository.DashboardMapper">
+
+    <select id="findSummaryByMonth" resultType="com.sowciamn.recsav.model.response.DashboardSummary">
+        SELECT
+            COALESCE(SUM(CASE WHEN category_type = '1' THEN display_amount ELSE 0 END), 0) AS depositTotal,
+            COALESCE(SUM(CASE WHEN category_type = '2' THEN display_amount * -1 ELSE 0 END), 0) AS expenseTotal,
+            COALESCE(SUM(display_amount), 0) AS balance
+        FROM
+            v_household_account_book
+        WHERE
+            actual_date BETWEEN #{startDate} AND #{endDate};
+    </select>
+
+    <select id="findCategoryExpensesByMonth" resultType="com.sowciamn.recsav.model.response.CategoryExpense">
+        SELECT
+            category_nm AS categoryNm,
+            COALESCE(SUM(display_amount * -1), 0) AS amount
+        FROM
+            v_household_account_book
+        WHERE
+            category_type = '2'
+            AND actual_date BETWEEN #{startDate} AND #{endDate}
+        GROUP BY
+            category_nm
+        ORDER BY
+            amount DESC;
+    </select>
+
+</mapper>

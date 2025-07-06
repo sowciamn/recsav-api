@@ -21,7 +21,7 @@ import com.sowciamn.recsav.model.request.CategoryRequest;
 import com.sowciamn.recsav.service.CategoryService;
 
 @RestController
-@RequestMapping("/api/category")
+@RequestMapping("/api/categories")
 public class CategoryController {
 
     private final CategoryService categoryService;

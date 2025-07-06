@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sowciamn.recsav.repository.DepositAccountMapper">
+
+    <select id="findAll" resultType="com.sowciamn.recsav.model.entity.DepositAccount">
+        SELECT
+            deposit_account_cd,
+            deposit_account_nm,
+            deposit_usage,
+            investment_account_flg
+        FROM
+            deposit_account
+        ORDER BY
+            deposit_account_cd;
+    </select>
+
+    <select id="findById" resultType="com.sowciamn.recsav.model.entity.DepositAccount">
+        SELECT
+            deposit_account_cd,
+            deposit_account_nm,
+            deposit_usage,
+            investment_account_flg
+        FROM
+            deposit_account
+        WHERE
+            deposit_account_cd = #{depositAccountCd};
+    </select>
+
+    <insert id="insert" parameterType="com.sowciamn.recsav.model.entity.DepositAccount">
+        INSERT INTO deposit_account (
+            deposit_account_cd,
+            deposit_account_nm,
+            deposit_usage,
+            investment_account_flg
+        ) VALUES (
+            #{depositAccountCd},
+            #{depositAccountNm},
+            #{depositUsage},
+            #{investmentAccountFlg}
+        );
+    </insert>
+
+    <update id="update" parameterType="com.sowciamn.recsav.model.entity.DepositAccount">
+        UPDATE
+            deposit_account
+        SET
+            deposit_account_nm = #{depositAccountNm},
+            deposit_usage = #{depositUsage},
+            investment_account_flg = #{investmentAccountFlg}
+        WHERE
+            deposit_account_cd = #{depositAccountCd};
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM
+            deposit_account
+        WHERE
+            deposit_account_cd = #{depositAccountCd};
+    </delete>
+
+</mapper>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sowciamn.recsav.repository.InvestmentPlMapper">
+
+    <select id="findAll" resultType="com.sowciamn.recsav.model.entity.InvestmentPl">
+        SELECT
+            investment_pl_year_month,
+            deposit_account_cd,
+            investment_pl_amount,
+            investment_pl_remarks
+        FROM
+            investment_pl
+        ORDER BY
+            investment_pl_year_month DESC, deposit_account_cd;
+    </select>
+
+    <select id="findById" resultType="com.sowciamn.recsav.model.entity.InvestmentPl">
+        SELECT
+            investment_pl_year_month,
+            deposit_account_cd,
+            investment_pl_amount,
+            investment_pl_remarks
+        FROM
+            investment_pl
+        WHERE
+            investment_pl_year_month = #{investmentPlYearMonth} AND deposit_account_cd = #{depositAccountCd};
+    </select>
+
+    <insert id="insert" parameterType="com.sowciamn.recsav.model.entity.InvestmentPl">
+        INSERT INTO investment_pl (
+            investment_pl_year_month,
+            deposit_account_cd,
+            investment_pl_amount,
+            investment_pl_remarks
+        ) VALUES (
+            #{investmentPlYearMonth},
+            #{depositAccountCd},
+            #{investmentPlAmount},
+            #{investmentPlRemarks}
+        );
+    </insert>
+
+    <update id="update" parameterType="com.sowciamn.recsav.model.entity.InvestmentPl">
+        UPDATE
+            investment_pl
+        SET
+            investment_pl_amount = #{investmentPlAmount},
+            investment_pl_remarks = #{investmentPlRemarks}
+        WHERE
+            investment_pl_year_month = #{investmentPlYearMonth} AND deposit_account_cd = #{depositAccountCd};
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM
+            investment_pl
+        WHERE
+            investment_pl_year_month = #{investmentPlYearMonth} AND deposit_account_cd = #{depositAccountCd};
+    </delete>
+
+</mapper>

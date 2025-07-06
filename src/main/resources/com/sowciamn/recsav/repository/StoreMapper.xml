@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sowciamn.recsav.repository.StoreMapper">
+
+    <select id="findAll" resultType="com.sowciamn.recsav.model.entity.Store">
+        SELECT
+            store_cd,
+            store_nm,
+            store_address
+        FROM
+            store
+        ORDER BY
+            store_cd;
+    </select>
+
+    <select id="findById" resultType="com.sowciamn.recsav.model.entity.Store">
+        SELECT
+            store_cd,
+            store_nm,
+            store_address
+        FROM
+            store
+        WHERE
+            store_cd = #{storeCd};
+    </select>
+
+    <insert id="insert" parameterType="com.sowciamn.recsav.model.entity.Store" useGeneratedKeys="true" keyProperty="storeCd">
+        INSERT INTO store (
+            store_nm,
+            store_address
+        ) VALUES (
+            #{storeNm},
+            #{storeAddress}
+        );
+    </insert>
+
+    <update id="update" parameterType="com.sowciamn.recsav.model.entity.Store">
+        UPDATE
+            store
+        SET
+            store_nm = #{storeNm},
+            store_address = #{storeAddress}
+        WHERE
+            store_cd = #{storeCd};
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM
+            store
+        WHERE
+            store_cd = #{storeCd};
+    </delete>
+
+</mapper>

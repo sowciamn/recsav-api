@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sowciamn.recsav.repository.HouseholdAccountBookMapper">
+
+    <select id="findAll" resultType="com.sowciamn.recsav.model.entity.HouseholdAccountBook">
+        SELECT
+            hab_seq,
+            actual_date,
+            category_cd,
+            store_cd,
+            amount,
+            remarks,
+            linking_data_type
+        FROM
+            household_account_book
+        ORDER BY
+            actual_date DESC, hab_seq DESC;
+    </select>
+
+    <select id="findById" resultType="com.sowciamn.recsav.model.entity.HouseholdAccountBook">
+        SELECT
+            hab_seq,
+            actual_date,
+            category_cd,
+            store_cd,
+            amount,
+            remarks,
+            linking_data_type
+        FROM
+            household_account_book
+        WHERE
+            hab_seq = #{habSeq};
+    </select>
+
+    <insert id="insert" parameterType="com.sowciamn.recsav.model.entity.HouseholdAccountBook" useGeneratedKeys="true" keyProperty="habSeq">
+        INSERT INTO household_account_book (
+            actual_date,
+            category_cd,
+            store_cd,
+            amount,
+            remarks,
+            linking_data_type
+        ) VALUES (
+            #{actualDate},
+            #{categoryCd},
+            #{storeCd},
+            #{amount},
+            #{remarks},
+            #{linkingDataType}
+        );
+    </insert>
+
+    <update id="update" parameterType="com.sowciamn.recsav.model.entity.HouseholdAccountBook">
+        UPDATE
+            household_account_book
+        SET
+            actual_date = #{actualDate},
+            category_cd = #{categoryCd},
+            store_cd = #{storeCd},
+            amount = #{amount},
+            remarks = #{remarks},
+            linking_data_type = #{linkingDataType}
+        WHERE
+            hab_seq = #{habSeq};
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM
+            household_account_book
+        WHERE
+            hab_seq = #{habSeq};
+    </delete>
+
+</mapper>
