@@ -65,7 +65,7 @@
 
 - **[データベース設計書](DATABASE_DESIGN.md):** ER図、テーブル定義、ビュー定義など。
 - **[API仕様書](API_SPECIFICATION.md):** 各APIエンドポイントの詳細。
-- **[テーブル定義書](TABLE_DEFINITION.md):** 各テーブルのカラム詳細。
+
 
 ## ライセンス
 
