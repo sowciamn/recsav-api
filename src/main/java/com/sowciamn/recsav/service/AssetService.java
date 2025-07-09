@@ -23,8 +23,8 @@ public class AssetService {
         this.assetMapper = assetMapper;
     }
 
-    public List<Asset> findAllAssets() {
-        return assetMapper.findAll();
+    public List<Asset> findAllAssets(String yearMonth) {
+        return assetMapper.findAll(yearMonth);
     }
 
     @Transactional

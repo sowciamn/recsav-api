@@ -10,7 +10,7 @@ import com.sowciamn.recsav.model.entity.HouseholdAccountBook;
 
 @Mapper
 public interface HouseholdAccountBookMapper {
-    List<HouseholdAccountBook> findAll();
+    List<HouseholdAccountBook> findAll(@Param("yearMonth") String yearMonth);
     Optional<HouseholdAccountBook> findById(@Param("habSeq") Long habSeq);
     int insert(HouseholdAccountBook householdAccountBook);
     int update(HouseholdAccountBook householdAccountBook);

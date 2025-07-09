@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.sowciamn.recsav.model.entity.InvestmentPl;
 import com.sowciamn.recsav.model.request.InvestmentPlRequest;
 import com.sowciamn.recsav.service.InvestmentPlService;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("/api/investment-pls")
@@ -34,8 +35,8 @@ public class InvestmentPlController {
     }
 
     @GetMapping
-    public List<InvestmentPl> getAllInvestmentPls() {
-        return investmentPlService.findAllInvestmentPls();
+    public List<InvestmentPl> getAllInvestmentPls(@RequestParam(required = false) String yearMonth) {
+        return investmentPlService.findAllInvestmentPls(yearMonth);
     }
 
     @PostMapping

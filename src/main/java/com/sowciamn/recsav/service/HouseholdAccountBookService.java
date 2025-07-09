@@ -22,8 +22,8 @@ public class HouseholdAccountBookService {
         this.householdAccountBookMapper = householdAccountBookMapper;
     }
 
-    public List<HouseholdAccountBook> findAllHouseholdAccountBooks() {
-        return householdAccountBookMapper.findAll();
+    public List<HouseholdAccountBook> findAllHouseholdAccountBooks(String yearMonth) {
+        return householdAccountBookMapper.findAll(yearMonth);
     }
 
     @Transactional

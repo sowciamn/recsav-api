@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.sowciamn.recsav.model.entity.HouseholdAccountBook;
 import com.sowciamn.recsav.model.request.HouseholdAccountBookRequest;
 import com.sowciamn.recsav.service.HouseholdAccountBookService;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("/api/household-account-books")
@@ -32,8 +33,8 @@ public class HouseholdAccountBookController {
     }
 
     @GetMapping
-    public List<HouseholdAccountBook> getAllHouseholdAccountBooks() {
-        return householdAccountBookService.findAllHouseholdAccountBooks();
+    public List<HouseholdAccountBook> getAllHouseholdAccountBooks(@RequestParam(required = false) String yearMonth) {
+        return householdAccountBookService.findAllHouseholdAccountBooks(yearMonth);
     }
 
     @PostMapping

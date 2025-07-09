@@ -11,7 +11,7 @@ import com.sowciamn.recsav.model.entity.Asset;
 
 @Mapper
 public interface AssetMapper {
-    List<Asset> findAll();
+    List<Asset> findAll(@Param("yearMonth") String yearMonth);
     Optional<Asset> findById(@Param("assetYearMonth") LocalDate assetYearMonth, @Param("depositAccountCd") String depositAccountCd);
     int insert(Asset asset);
     int update(Asset asset);

@@ -1,196 +1,744 @@
+
 # API仕様書
 
-## 1. 資産 (Asset)
+## 概要
 
-### `GET /api/assets`
+このドキュメントは、家計簿WebアプリのAPI仕様を定義します。
 
-- **説明:** 全ての資産情報を取得します。
-- **レスポンス:** `200 OK`
-  ```json
-  [
+## エンドポイント一覧
+
+| メソッド | パス | 説明 |
+| --- | --- | --- |
+| GET | /api/assets | 資産の一覧を取得する |
+| POST | /api/assets | 資産を登録する |
+| PUT | /api/assets/{assetYearMonth}/{depositAccountCd} | 資産を更新する |
+| DELETE | /api/assets/{assetYearMonth}/{depositAccountCd} | 資産を削除する |
+| GET | /api/categories | カテゴリの一覧を取得する |
+| POST | /api/categories | カテゴリを登録する |
+| PUT | /api/categories/{categoryCd} | カテゴリを更新する |
+| DELETE | /api/categories/{categoryCd} | カテゴリを削除する |
+| GET | /api/dashboard | ダッシュボードの情報を取得する |
+| GET | /api/deposit-accounts | 預金口座の一覧を取得する |
+| POST | /api/deposit-accounts | 預金口座を登録する |
+| PUT | /api/deposit-accounts/{depositAccountCd} | 預金口座を更新する |
+| DELETE | /api/deposit-accounts/{depositAccountCd} | 預金口座を削除する |
+| GET | /api/fixed-costs | 固定費の一覧を取得する |
+| POST | /api/fixed-costs | 固定費を登録する |
+| PUT | /api/fixed-costs/{fixedCostSeq} | 固定費を更新する |
+| DELETE | /api/fixed-costs/{fixedCostSeq} | 固定費を削除する |
+| GET | /api/household-account-books | 家計簿の一覧を取得する |
+| POST | /api/household-account-books | 家計簿を登録する |
+| PUT | /api/household-account-books/{habSeq} | 家計簿を更新する |
+| DELETE | /api/household-account-books/{habSeq} | 家計簿を削除する |
+| GET | /api/investment-pls | 投資損益の一覧を取得する |
+| POST | /api/investment-pls | 投資損益を登録する |
+| PUT | /api/investment-pls/{investmentPlYearMonth}/{depositAccountCd} | 投資損益を更新する |
+| DELETE | /api/investment-pls/{investmentPlYearMonth}/{depositAccountCd} | 投資損益を削除する |
+| GET | /api/stores | 店の一覧を取得する |
+| POST | /api/stores | 店を登録する |
+| PUT | /api/stores/{storeCd} | 店を更新する |
+| DELETE | /api/stores/{storeCd} | 店を削除する |
+
+## API詳細
+
+### 資産 (Asset)
+
+#### GET /api/assets
+
+資産の一覧を取得します。
+
+- **クエリパラメータ**
+  - `yearMonth` (string, optional): 年月 (例: 2023-07)
+
+- **レスポンス (200 OK)**
+
+```json
+[
+  {
+    "assetYearMonth": "2023-07-01",
+    "depositAccountCd": "001",
+    "assetAmount": 1000000,
+    "assetRemarks": "給与振込",
+    "createdAt": "2023-07-09T12:00:00Z",
+    "updatedAt": "2023-07-09T12:00:00Z"
+  }
+]
+```
+
+#### POST /api/assets
+
+新しい資産を登録します。
+
+- **リクエスト**
+
+```json
+{
+  "assetYearMonth": "2023-08-01",
+  "depositAccountCd": "001",
+  "assetAmount": 1200000,
+  "assetRemarks": "ボーナス"
+}
+```
+
+- **レスポンス (201 Created)**
+
+```json
+{
+  "assetYearMonth": "2023-08-01",
+  "depositAccountCd": "001",
+  "assetAmount": 1200000,
+  "assetRemarks": "ボーナス",
+  "createdAt": "2023-07-10T10:00:00Z",
+  "updatedAt": "2023-07-10T10:00:00Z"
+}
+```
+
+#### PUT /api/assets/{assetYearMonth}/{depositAccountCd}
+
+指定した資産を更新します。
+
+- **パスパラメータ**
+  - `assetYearMonth` (string, required): 資産年月 (例: 2023-07-01)
+  - `depositAccountCd` (string, required): 預金口座コード
+
+- **リクエスト**
+
+```json
+{
+  "assetAmount": 1100000,
+  "assetRemarks": "臨時収入"
+}
+```
+
+- **レスポンス (200 OK)**
+
+```json
+{
+  "assetYearMonth": "2023-07-01",
+  "depositAccountCd": "001",
+  "assetAmount": 1100000,
+  "assetRemarks": "臨時収入",
+  "createdAt": "2023-07-09T12:00:00Z",
+  "updatedAt": "2023-07-10T11:00:00Z"
+}
+```
+
+#### DELETE /api/assets/{assetYearMonth}/{depositAccountCd}
+
+指定した資産を削除します。
+
+- **パスパラメータ**
+  - `assetYearMonth` (string, required): 資産年月 (例: 2023-07-01)
+  - `depositAccountCd` (string, required): 預金口座コード
+
+- **レスポンス (204 No Content)**
+
+### カテゴリ (Category)
+
+#### GET /api/categories
+
+カテゴリの一覧を取得します。
+
+- **レスポンス (200 OK)**
+
+```json
+[
+  {
+    "categoryCd": 1,
+    "categoryNm": "給与",
+    "categoryType": "1",
+    "displayOrder": 1
+  }
+]
+```
+
+#### POST /api/categories
+
+新しいカテゴリを登録します。
+
+- **リクエスト**
+
+```json
+{
+  "categoryNm": "食費",
+  "categoryType": "2",
+  "displayOrder": 2
+}
+```
+
+- **レスポンス (201 Created)**
+
+```json
+{
+  "categoryCd": 2,
+  "categoryNm": "食費",
+  "categoryType": "2",
+  "displayOrder": 2
+}
+```
+
+#### PUT /api/categories/{categoryCd}
+
+指定したカテゴリを更新します。
+
+- **パスパラメータ**
+  - `categoryCd` (integer, required): カテゴリコード
+
+- **リクエスト**
+
+```json
+{
+  "categoryNm": "外食費",
+  "displayOrder": 3
+}
+```
+
+- **レスポンス (200 OK)**
+
+```json
+{
+  "categoryCd": 2,
+  "categoryNm": "外食費",
+  "categoryType": "2",
+  "displayOrder": 3
+}
+```
+
+#### DELETE /api/categories/{categoryCd}
+
+指定したカテゴリを削除します。
+
+- **パスパラメータ**
+  - `categoryCd` (integer, required): カテゴリコード
+
+- **レスポンス (204 No Content)**
+
+### ダッシュボード (Dashboard)
+
+#### GET /api/dashboard
+
+ダッシュボードの情報を取得します。
+
+- **クエリパラメータ**
+  - `yearMonth` (string, required): 年月 (例: 2023-07)
+
+- **レスポンス (200 OK)**
+
+```json
+{
+  "summary": {
+    "depositTotal": 500000,
+    "expenseTotal": 300000,
+    "balance": 200000
+  },
+  "categoryExpenses": [
     {
-      "assetYearMonth": "2023-01",
-      "depositAccountCd": "001",
-      "assetAmount": 1000000,
-      "assetRemarks": "給与振込"
+      "categoryNm": "食費",
+      "amount": 100000
+    },
+    {
+      "categoryNm": "家賃",
+      "amount": 150000
     }
   ]
-  ```
+}
+```
 
-### `POST /api/assets`
+### 預金口座 (Deposit Account)
 
-- **説明:** 新しい資産情報を登録します。
-- **リクエストボディ:**
-  ```json
+#### GET /api/deposit-accounts
+
+預金口座の一覧を取得します。
+
+- **レスポンス (200 OK)**
+
+```json
+[
   {
-    "assetYearMonth": "2023-02",
     "depositAccountCd": "001",
-    "assetAmount": 1200000,
-    "assetRemarks": "ボーナス"
+    "depositAccountNm": "メインバンク",
+    "depositUsage": "生活費用",
+    "investmentAccountFlg": "0",
+    "createdAt": "2023-07-09T12:00:00Z",
+    "updatedAt": "2023-07-09T12:00:00Z"
   }
-  ```
-- **レスポンス:** `201 Created`
+]
+```
 
-### `PUT /api/assets/{assetYearMonth}/{depositAccountCd}`
+#### POST /api/deposit-accounts
 
-- **説明:** 既存の資産情報を更新します。
-- **パスパラメータ:**
-  - `assetYearMonth`: 資産年月 (例: `2023-01`)
-  - `depositAccountCd`: 預金口座コード (例: `001`)
-- **リクエストボディ:**
-  ```json
+新しい預金口座を登録します。
+
+- **リクエスト**
+
+```json
+{
+  "depositAccountCd": "002",
+  "depositAccountNm": "サブバンク",
+  "depositUsage": "貯金用",
+  "investmentAccountFlg": "0"
+}
+```
+
+- **レスポンス (201 Created)**
+
+```json
+{
+  "depositAccountCd": "002",
+  "depositAccountNm": "サブバンク",
+  "depositUsage": "貯金用",
+  "investmentAccountFlg": "0",
+  "createdAt": "2023-07-10T10:00:00Z",
+  "updatedAt": "2023-07-10T10:00:00Z"
+}
+```
+
+#### PUT /api/deposit-accounts/{depositAccountCd}
+
+指定した預金口座を更新します。
+
+- **パスパラメータ**
+  - `depositAccountCd` (string, required): 預金口座コード
+
+- **リクエスト**
+
+```json
+{
+  "depositAccountNm": "投資用バンク",
+  "investmentAccountFlg": "1"
+}
+```
+
+- **レスポンス (200 OK)**
+
+```json
+{
+  "depositAccountCd": "002",
+  "depositAccountNm": "投資用バンク",
+  "depositUsage": "貯金用",
+  "investmentAccountFlg": "1",
+  "createdAt": "2023-07-10T10:00:00Z",
+  "updatedAt": "2023-07-10T11:00:00Z"
+}
+```
+
+#### DELETE /api/deposit-accounts/{depositAccountCd}
+
+指定した預金口座を削除します。
+
+- **パスパラメータ**
+  - `depositAccountCd` (string, required): 預金口座コード
+
+- **レスポンス (204 No Content)**
+
+### 固定費 (Fixed Cost)
+
+#### GET /api/fixed-costs
+
+固定費の一覧を取得します。
+
+- **レスポンス (200 OK)**
+
+```json
+[
   {
-    "assetAmount": 1100000,
-    "assetRemarks": "給与振込（修正）"
+    "fixedCostSeq": 1,
+    "categoryCd": 3,
+    "fixedCostDetails": "家賃",
+    "displayOrder": 1,
+    "remarks": "毎月25日引き落とし",
+    "january": 80000,
+    "february": 80000,
+    "march": 80000,
+    "april": 80000,
+    "may": 80000,
+    "june": 80000,
+    "july": 80000,
+    "august": 80000,
+    "september": 80000,
+    "october": 80000,
+    "november": 80000,
+    "december": 80000,
+    "createdAt": "2023-07-09T12:00:00Z",
+    "updatedAt": "2023-07-09T12:00:00Z"
   }
-  ```
-- **レスポンス:** `200 OK`
+]
+```
 
-### `DELETE /api/assets/{assetYearMonth}/{depositAccountCd}`
+#### POST /api/fixed-costs
 
-- **説明:** 既存の資産情報を削除します。
-- **パスパラメータ:**
-  - `assetYearMonth`: 資産年月 (例: `2023-01`)
-  - `depositAccountCd`: 預金口座コード (例: `001`)
-- **レスポンス:** `204 No Content`
+新しい固定費を登録します。
 
-## 2. カテゴリ (Category)
+- **リクエスト**
 
-### `GET /api/categories`
+```json
+{
+  "categoryCd": 4,
+  "fixedCostDetails": "光熱費",
+  "displayOrder": 2,
+  "remarks": "",
+  "january": 10000,
+  "february": 12000,
+  "march": 11000,
+  "april": 9000,
+  "may": 8000,
+  "june": 7000,
+  "july": 8000,
+  "august": 9000,
+  "september": 10000,
+  "october": 11000,
+  "november": 12000,
+  "december": 13000
+}
+```
 
-- **説明:** 全てのカテゴリ情報を取得します。
-- **レスポンス:** `200 OK`
+- **レスポンス (201 Created)**
 
-### `POST /api/categories`
+```json
+{
+  "fixedCostSeq": 2,
+  "categoryCd": 4,
+  "fixedCostDetails": "光熱費",
+  "displayOrder": 2,
+  "remarks": "",
+  "january": 10000,
+  "february": 12000,
+  "march": 11000,
+  "april": 9000,
+  "may": 8000,
+  "june": 7000,
+  "july": 8000,
+  "august": 9000,
+  "september": 10000,
+  "october": 11000,
+  "november": 12000,
+  "december": 13000,
+  "createdAt": "2023-07-10T10:00:00Z",
+  "updatedAt": "2023-07-10T10:00:00Z"
+}
+```
 
-- **説明:** 新しいカテゴリ情報を登録します。
-- **レスポンス:** `201 Created`
+#### PUT /api/fixed-costs/{fixedCostSeq}
 
-### `PUT /api/categories/{categoryCd}`
+指定した固定費を更新します。
 
-- **説明:** 既存のカテゴリ情報を更新します。
-- **レスポンス:** `200 OK`
+- **パスパラメータ**
+  - `fixedCostSeq` (long, required): 固定費SEQ
 
-### `DELETE /api/categories/{categoryCd}`
+- **リクエスト**
 
-- **説明:** 既存のカテゴリ情報を削除します。
-- **レスポンス:** `204 No Content`
+```json
+{
+  "fixedCostDetails": "家賃（更新）",
+  "remarks": "備考更新"
+}
+```
 
-## 3. ダッシュボード (Dashboard)
+- **レスポンス (200 OK)**
 
-### `GET /api/dashboard`
+```json
+{
+  "fixedCostSeq": 1,
+  "categoryCd": 3,
+  "fixedCostDetails": "家賃（更新）",
+  "displayOrder": 1,
+  "remarks": "備考更新",
+  "january": 80000,
+  "february": 80000,
+  "march": 80000,
+  "april": 80000,
+  "may": 80000,
+  "june": 80000,
+  "july": 80000,
+  "august": 80000,
+  "september": 80000,
+  "october": 80000,
+  "november": 80000,
+  "december": 80000,
+  "createdAt": "2023-07-09T12:00:00Z",
+  "updatedAt": "2023-07-10T11:00:00Z"
+}
+```
 
-- **説明:** ダッシュボードの情報を取得します。
-- **リクエストパラメータ:**
-  - `yearMonth`: 年月 (例: `2023-01`)
-- **レスポンス:** `200 OK`
+#### DELETE /api/fixed-costs/{fixedCostSeq}
 
-## 4. 預金口座 (Deposit Account)
+指定した固定費を削除します。
 
-### `GET /api/deposit-accounts`
+- **パスパラメータ**
+  - `fixedCostSeq` (long, required): 固定費SEQ
 
-- **説明:** 全ての預金口座情報を取得します。
-- **レスポンス:** `200 OK`
+- **レスポンス (204 No Content)**
 
-### `POST /api/deposit-accounts`
+### 家計簿 (Household Account Book)
 
-- **説明:** 新しい預金口座情報を登録します。
-- **レスポンス:** `201 Created`
+#### GET /api/household-account-books
 
-### `PUT /api/deposit-accounts/{depositAccountCd}`
+家計簿の一覧を取得します。
 
-- **説明:** 既存の預金口座情報を更新します。
-- **レスポンス:** `200 OK`
+- **クエリパラメータ**
+  - `yearMonth` (string, optional): 年月 (例: 2023-07)
 
-### `DELETE /api/deposit-accounts/{depositAccountCd}`
+- **レスポンス (200 OK)**
 
-- **説明:** 既存の預金口座情報を削除します。
-- **レスポンス:** `204 No Content`
+```json
+[
+  {
+    "habSeq": 1,
+    "actualDate": "2023-07-09",
+    "categoryCd": 2,
+    "storeCd": 1,
+    "amount": 3000,
+    "remarks": "夕食の買い物",
+    "linkingDataType": null,
+    "createdAt": "2023-07-09T18:00:00Z",
+    "updatedAt": "2023-07-09T18:00:00Z"
+  }
+]
+```
 
-## 5. 固定費 (Fixed Cost)
+#### POST /api/household-account-books
 
-### `GET /api/fixed-costs`
+新しい家計簿を登録します。
 
-- **説明:** 全ての固定費情報を取得します。
-- **レスポンス:** `200 OK`
+- **リクエスト**
 
-### `POST /api/fixed-costs`
+```json
+{
+  "actualDate": "2023-07-10",
+  "categoryCd": 2,
+  "storeCd": 2,
+  "amount": 1500,
+  "remarks": "昼食"
+}
+```
 
-- **説明:** 新しい固定費情報を登録します。
-- **レスポンス:** `201 Created`
+- **レスポンス (201 Created)**
 
-### `PUT /api/fixed-costs/{fixedCostSeq}`
+```json
+{
+  "habSeq": 2,
+  "actualDate": "2023-07-10",
+  "categoryCd": 2,
+  "storeCd": 2,
+  "amount": 1500,
+  "remarks": "昼食",
+  "linkingDataType": null,
+  "createdAt": "2023-07-10T12:00:00Z",
+  "updatedAt": "2023-07-10T12:00:00Z"
+}
+```
 
-- **説明:** 既存の固定費情報を更新します。
-- **レスポンス:** `200 OK`
+#### PUT /api/household-account-books/{habSeq}
 
-### `DELETE /api/fixed-costs/{fixedCostSeq}`
+指定した家計簿を更新します。
 
-- **説明:** 既存の固定費情報を削除します。
-- **レスポンス:** `204 No Content`
+- **パスパラメータ**
+  - `habSeq` (long, required): 家計簿SEQ
 
-## 6. 家計簿 (Household Account Book)
+- **リクエスト**
 
-### `GET /api/household-account-books`
+```json
+{
+  "amount": 2000,
+  "remarks": "昼食（変更）"
+}
+```
 
-- **説明:** 全ての家計簿情報を取得します。
-- **レスポンス:** `200 OK`
+- **レスポンス (200 OK)**
 
-### `POST /api/household-account-books`
+```json
+{
+  "habSeq": 2,
+  "actualDate": "2023-07-10",
+  "categoryCd": 2,
+  "storeCd": 2,
+  "amount": 2000,
+  "remarks": "昼食（変更）",
+  "linkingDataType": null,
+  "createdAt": "2023-07-10T12:00:00Z",
+  "updatedAt": "2023-07-10T13:00:00Z"
+}
+```
 
-- **説明:** 新しい家計簿情報を登録します。
-- **レスポンス:** `201 Created`
+#### DELETE /api/household-account-books/{habSeq}
 
-### `PUT /api/household-account-books/{habSeq}`
+指定した家計簿を削除します。
 
-- **説明:** 既存の家計簿情報を更新します。
-- **レスポンス:** `200 OK`
+- **パスパラメータ**
+  - `habSeq` (long, required): 家計簿SEQ
 
-### `DELETE /api/household-account-books/{habSeq}`
+- **レスポンス (204 No Content)**
 
-- **説明:** 既存の家計簿情報を削除します。
-- **レスポンス:** `204 No Content`
+### 投資損益 (Investment P/L)
 
-## 7. 投資損益 (Investment PL)
+#### GET /api/investment-pls
 
-### `GET /api/investment-pls`
+投資損益の一覧を取得します。
 
-- **説明:** 全ての投資損益情報を取得します。
-- **レスポンス:** `200 OK`
+- **クエリパラメータ**
+  - `yearMonth` (string, optional): 年月 (例: 2023-07)
 
-### `POST /api/investment-pls`
+- **レスポンス (200 OK)**
 
-- **説明:** 新しい投資損益情報を登録します。
-- **レスポンス:** `201 Created`
+```json
+[
+  {
+    "investmentPlYearMonth": "2023-07-01",
+    "depositAccountCd": "002",
+    "investmentPlAmount": 50000,
+    "investmentPlRemarks": "株式評価益",
+    "createdAt": "2023-07-09T12:00:00Z",
+    "updatedAt": "2023-07-09T12:00:00Z"
+  }
+]
+```
 
-### `PUT /api/investment-pls/{investmentPlYearMonth}/{depositAccountCd}`
+#### POST /api/investment-pls
 
-- **説明:** 既存の投資損益情報を更新します。
-- **レスポンス:** `200 OK`
+新しい投資損益を登録します。
 
-### `DELETE /api/investment-pls/{investmentPlYearMonth}/{depositAccountCd}`
+- **リクエスト**
 
-- **説明:** 既存の投資損益情報を削除します。
-- **レスポンス:** `204 No Content`
+```json
+{
+  "investmentPlYearMonth": "2023-08-01",
+  "depositAccountCd": "002",
+  "investmentPlAmount": -10000,
+  "investmentPlRemarks": "株式評価損"
+}
+```
 
-## 8. 店舗 (Store)
+- **レスポンス (201 Created)**
 
-### `GET /api/stores`
+```json
+{
+  "investmentPlYearMonth": "2023-08-01",
+  "depositAccountCd": "002",
+  "investmentPlAmount": -10000,
+  "investmentPlRemarks": "株式評価損",
+  "createdAt": "2023-07-10T10:00:00Z",
+  "updatedAt": "2023-07-10T10:00:00Z"
+}
+```
 
-- **説明:** 全ての店舗情報を取得します。
-- **レスポンス:** `200 OK`
+#### PUT /api/investment-pls/{investmentPlYearMonth}/{depositAccountCd}
 
-### `POST /api/stores`
+指定した投資損益を更新します。
 
-- **説明:** 新しい店舗情報を登録します。
-- **レスポンス:** `201 Created`
+- **パスパラメータ**
+  - `investmentPlYearMonth` (string, required): 投資損益年月 (例: 2023-07-01)
+  - `depositAccountCd` (string, required): 預金口座コード
 
-### `PUT /api/stores/{storeCd}`
+- **リクエスト**
 
-- **説明:** 既存の店舗情報を更新します。
-- **レスポンス:** `200 OK`
+```json
+{
+  "investmentPlAmount": 60000,
+  "investmentPlRemarks": "備考更新"
+}
+```
 
-### `DELETE /api/stores/{storeCd}`
+- **レスポンス (200 OK)**
 
-- **説明:** 既存の店舗情報を削除します。
-- **レスポンス:** `204 No Content`
+```json
+{
+  "investmentPlYearMonth": "2023-07-01",
+  "depositAccountCd": "002",
+  "investmentPlAmount": 60000,
+  "investmentPlRemarks": "備考更新",
+  "createdAt": "2023-07-09T12:00:00Z",
+  "updatedAt": "2023-07-10T11:00:00Z"
+}
+```
+
+#### DELETE /api/investment-pls/{investmentPlYearMonth}/{depositAccountCd}
+
+指定した投資損益を削除します。
+
+- **パスパラメータ**
+  - `investmentPlYearMonth` (string, required): 投資損益年月 (例: 2023-07-01)
+  - `depositAccountCd` (string, required): 預金口座コード
+
+- **レスポンス (204 No Content)**
+
+### 店 (Store)
+
+#### GET /api/stores
+
+店の一覧を取得します。
+
+- **レスポンス (200 OK)**
+
+```json
+[
+  {
+    "storeCd": 1,
+    "storeNm": "スーパーA",
+    "storeAddress": "東京都新宿区…",
+    "createdAt": "2023-07-09T12:00:00Z",
+    "updatedAt": "2023-07-09T12:00:00Z"
+  }
+]
+```
+
+#### POST /api/stores
+
+新しい店を登録します。
+
+- **リクエスト**
+
+```json
+{
+  "storeNm": "コンビニB",
+  "storeAddress": "東京都渋谷区…"
+}
+```
+
+- **レスポンス (201 Created)**
+
+```json
+{
+  "storeCd": 2,
+  "storeNm": "コンビニB",
+  "storeAddress": "東京都渋谷区…",
+  "createdAt": "2023-07-10T10:00:00Z",
+  "updatedAt": "2023-07-10T10:00:00Z"
+}
+```
+
+#### PUT /api/stores/{storeCd}
+
+指定した店を更新します。
+
+- **パスパラメータ**
+  - `storeCd` (integer, required): 店コード
+
+- **リクエスト**
+
+```json
+{
+  "storeNm": "ドラッグストアC",
+  "storeAddress": "東京都豊島区…"
+}
+```
+
+- **レスポンス (200 OK)**
+
+```json
+{
+  "storeCd": 2,
+  "storeNm": "ドラッグストアC",
+  "storeAddress": "東京都豊島区…",
+  "createdAt": "2023-07-10T10:00:00Z",
+  "updatedAt": "2023-07-10T11:00:00Z"
+}
+```
+
+#### DELETE /api/stores/{storeCd}
+
+指定した店を削除します。
+
+- **パスパラメータ**
+  - `storeCd` (integer, required): 店コード
+
+- **レスポンス (204 No Content)**

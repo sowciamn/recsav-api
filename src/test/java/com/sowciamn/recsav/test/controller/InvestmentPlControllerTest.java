@@ -66,7 +66,7 @@ public class InvestmentPlControllerTest {
     @Test
     void getAllInvestmentPls_shouldReturnListOfInvestmentPls() throws Exception {
         List<InvestmentPl> allInvestmentPls = Arrays.asList(investmentPl1, investmentPl2);
-        when(investmentPlService.findAllInvestmentPls()).thenReturn(allInvestmentPls);
+        when(investmentPlService.findAllInvestmentPls(null)).thenReturn(allInvestmentPls);
 
         mockMvc.perform(get("/api/investment-pls"))
                 .andExpect(status().isOk())
@@ -74,6 +74,20 @@ public class InvestmentPlControllerTest {
                 .andExpect(jsonPath("$[0].depositAccountCd").value(investmentPl1.getDepositAccountCd()))
                 .andExpect(jsonPath("$[0].investmentPlAmount").value(investmentPl1.getInvestmentPlAmount()))
                 .andExpect(jsonPath("$[1].depositAccountCd").value(investmentPl2.getDepositAccountCd()));
+    }
+
+    @Test
+    void getAllInvestmentPls_shouldReturnFilteredListByYearMonth() throws Exception {
+        String yearMonth = "2024-06";
+        List<InvestmentPl> filteredInvestmentPls = Arrays.asList(investmentPl1, investmentPl2); // Both are in 2024-06
+        when(investmentPlService.findAllInvestmentPls(yearMonth)).thenReturn(filteredInvestmentPls);
+
+        mockMvc.perform(get("/api/investment-pls")
+                .param("yearMonth", yearMonth))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.length()").value(2))
+                .andExpect(jsonPath("$[0].depositAccountCd").value(investmentPl1.getDepositAccountCd()));
     }
 
     @Test

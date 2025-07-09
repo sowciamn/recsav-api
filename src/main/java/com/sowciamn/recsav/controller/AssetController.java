@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.sowciamn.recsav.model.entity.Asset;
 import com.sowciamn.recsav.model.request.AssetRequest;
 import com.sowciamn.recsav.service.AssetService;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("/api/assets")
@@ -34,8 +35,8 @@ public class AssetController {
     }
 
     @GetMapping
-    public List<Asset> getAllAssets() {
-        return assetService.findAllAssets();
+    public List<Asset> getAllAssets(@RequestParam(required = false) String yearMonth) {
+        return assetService.findAllAssets(yearMonth);
     }
 
     @PostMapping

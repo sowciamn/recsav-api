@@ -10,6 +10,11 @@
             investment_pl_remarks
         FROM
             investment_pl
+        <where>
+            <if test="yearMonth != null and yearMonth != ''">
+                TO_CHAR(investment_pl_year_month, 'YYYY-MM') = #{yearMonth}
+            </if>
+        </where>
         ORDER BY
             investment_pl_year_month DESC, deposit_account_cd;
     </select>

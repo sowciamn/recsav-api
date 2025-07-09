@@ -66,7 +66,7 @@ public class AssetControllerTest {
     @Test
     void getAllAssets_shouldReturnListOfAssets() throws Exception {
         List<Asset> allAssets = Arrays.asList(asset1, asset2);
-        when(assetService.findAllAssets()).thenReturn(allAssets);
+        when(assetService.findAllAssets(null)).thenReturn(allAssets);
 
         mockMvc.perform(get("/api/assets"))
                 .andExpect(status().isOk())
@@ -74,6 +74,20 @@ public class AssetControllerTest {
                 .andExpect(jsonPath("$[0].depositAccountCd").value(asset1.getDepositAccountCd()))
                 .andExpect(jsonPath("$[0].assetAmount").value(asset1.getAssetAmount()))
                 .andExpect(jsonPath("$[1].depositAccountCd").value(asset2.getDepositAccountCd()));
+    }
+
+    @Test
+    void getAllAssets_shouldReturnFilteredListByYearMonth() throws Exception {
+        String yearMonth = "2024-06";
+        List<Asset> filteredAssets = Arrays.asList(asset1, asset2); // Both assets are in 2024-06
+        when(assetService.findAllAssets(yearMonth)).thenReturn(filteredAssets);
+
+        mockMvc.perform(get("/api/assets")
+                .param("yearMonth", yearMonth))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.length()").value(2))
+                .andExpect(jsonPath("$[0].depositAccountCd").value(asset1.getDepositAccountCd()));
     }
 
     @Test

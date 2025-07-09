@@ -23,8 +23,8 @@ public class InvestmentPlService {
         this.investmentPlMapper = investmentPlMapper;
     }
 
-    public List<InvestmentPl> findAllInvestmentPls() {
-        return investmentPlMapper.findAll();
+    public List<InvestmentPl> findAllInvestmentPls(String yearMonth) {
+        return investmentPlMapper.findAll(yearMonth);
     }
 
     @Transactional

@@ -75,7 +75,7 @@ public class HouseholdAccountBookControllerTest {
     @Test
     void getAllHouseholdAccountBooks_shouldReturnListOfHouseholdAccountBooks() throws Exception {
         List<HouseholdAccountBook> allHab = Arrays.asList(hab1, hab2);
-        when(householdAccountBookService.findAllHouseholdAccountBooks()).thenReturn(allHab);
+        when(householdAccountBookService.findAllHouseholdAccountBooks(null)).thenReturn(allHab);
 
         mockMvc.perform(get("/api/household-account-books").accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -83,6 +83,21 @@ public class HouseholdAccountBookControllerTest {
                 .andExpect(jsonPath("$[0].habSeq").value(hab1.getHabSeq()))
                 .andExpect(jsonPath("$[0].remarks").value(hab1.getRemarks()))
                 .andExpect(jsonPath("$[1].habSeq").value(hab2.getHabSeq()));
+    }
+
+    @Test
+    void getAllHouseholdAccountBooks_shouldReturnFilteredListByYearMonth() throws Exception {
+        String yearMonth = "2024-07";
+        List<HouseholdAccountBook> filteredHab = Arrays.asList(hab1); // Assuming hab1 is in 2024-07
+        when(householdAccountBookService.findAllHouseholdAccountBooks(yearMonth)).thenReturn(filteredHab);
+
+        mockMvc.perform(get("/api/household-account-books")
+                .param("yearMonth", yearMonth)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.length()").value(1))
+                .andExpect(jsonPath("$[0].habSeq").value(hab1.getHabSeq()));
     }
 
     @Test

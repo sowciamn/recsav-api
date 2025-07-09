@@ -11,7 +11,7 @@ import com.sowciamn.recsav.model.entity.InvestmentPl;
 
 @Mapper
 public interface InvestmentPlMapper {
-    List<InvestmentPl> findAll();
+    List<InvestmentPl> findAll(@Param("yearMonth") String yearMonth);
     Optional<InvestmentPl> findById(@Param("investmentPlYearMonth") LocalDate investmentPlYearMonth, @Param("depositAccountCd") String depositAccountCd);
     int insert(InvestmentPl investmentPl);
     int update(InvestmentPl investmentPl);

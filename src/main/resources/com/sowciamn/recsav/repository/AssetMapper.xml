@@ -10,6 +10,11 @@
             asset_remarks
         FROM
             asset
+        <where>
+            <if test="yearMonth != null and yearMonth != ''">
+                TO_CHAR(asset_year_month, 'YYYY-MM') = #{yearMonth}
+            </if>
+        </where>
         ORDER BY
             asset_year_month DESC, deposit_account_cd;
     </select>

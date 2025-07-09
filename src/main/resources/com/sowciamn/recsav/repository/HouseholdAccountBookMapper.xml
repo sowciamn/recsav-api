@@ -13,6 +13,11 @@
             linking_data_type
         FROM
             household_account_book
+        <where>
+            <if test="yearMonth != null and yearMonth != ''">
+                TO_CHAR(actual_date, 'YYYY-MM') = #{yearMonth}
+            </if>
+        </where>
         ORDER BY
             actual_date DESC, hab_seq DESC;
     </select>
