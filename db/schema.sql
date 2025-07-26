@@ -12,70 +12,55 @@ CREATE OR REPLACE FUNCTION set_update_time() RETURNS trigger AS '
 /*             CREATE TABLE           */
 /**************************************/
 
-CREATE TABLE if_zaim (
-  if_zaim_seq serial,
-  if_zaim_date DATE,
-  if_zaim_method text,
-  if_zaim_category text,
-  if_zaim_category_detail text,
-  if_zaim_payment_source text,
-  if_zaim_deposit text,
-  if_zaim_item text,
-  if_zaim_remarks text,
-  if_zaim_store text,
-  if_zaim_currency text,
-  if_zaim_income_amount numeric(8, 0),
-  if_zaim_expense_amount numeric(8, 0),
-  if_zaim_transfer_amount numeric(8, 0),
-  if_zaim_balance_amount numeric(8, 0),
-  if_zaim_before_amount numeric(8, 0),
-  if_zaim_aggregation_settings text,
+CREATE TABLE if_rakuten_card (
+  if_rakuten_card_seq serial,
+  usage_date DATE,
+  merchant_product_name text,
+  customer_nm text,
+  payment_method text,
+  usage_amount numeric(8, 0),
+  payment_fee numeric(8, 0),
+  total_payment_amount numeric(8, 0),
+  payment_month text,
+  monthly_payment_amount numeric(8, 0),
+  monthly_carryover_balance numeric(8, 0),
+  new_signup_flag text,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (if_zaim_seq)
+  PRIMARY KEY (if_rakuten_card_seq)
 );
 
-COMMENT ON TABLE if_zaim IS 'Zaimインターフェース';
+COMMENT ON TABLE if_rakuten_card IS '楽天カードインターフェース';
 
-COMMENT ON COLUMN if_zaim.if_zaim_seq IS 'ZaimインターフェースSeq';
+COMMENT ON COLUMN if_rakuten_card.if_rakuten_card_seq IS '楽天カードインターフェースSeq';
 
-COMMENT ON COLUMN if_zaim.if_zaim_date IS '日付';
+COMMENT ON COLUMN if_rakuten_card.usage_date IS '利用日';
 
-COMMENT ON COLUMN if_zaim.if_zaim_method IS '方法';
+COMMENT ON COLUMN if_rakuten_card.merchant_product_name IS '利用店名・商品名';
 
-COMMENT ON COLUMN if_zaim.if_zaim_category IS 'カテゴリ';
+COMMENT ON COLUMN if_rakuten_card.customer_nm IS '利用者';
 
-COMMENT ON COLUMN if_zaim.if_zaim_category_detail IS 'カテゴリの内訳';
+COMMENT ON COLUMN if_rakuten_card.payment_method IS '支払方法';
 
-COMMENT ON COLUMN if_zaim.if_zaim_payment_source IS '支払元';
+COMMENT ON COLUMN if_rakuten_card.usage_amount IS '利用金額';
 
-COMMENT ON COLUMN if_zaim.if_zaim_deposit IS '入金先';
+COMMENT ON COLUMN if_rakuten_card.payment_fee IS '支払手数料';
 
-COMMENT ON COLUMN if_zaim.if_zaim_item IS '品目';
+COMMENT ON COLUMN if_rakuten_card.total_payment_amount IS '支払総額';
 
-COMMENT ON COLUMN if_zaim.if_zaim_remarks IS 'メモ';
+COMMENT ON COLUMN if_rakuten_card.payment_month IS '支払月';
 
-COMMENT ON COLUMN if_zaim.if_zaim_store IS 'お店';
+COMMENT ON COLUMN if_rakuten_card.monthly_payment_amount IS 'N月支払金額';
 
-COMMENT ON COLUMN if_zaim.if_zaim_currency IS '通貨';
+COMMENT ON COLUMN if_rakuten_card.monthly_carryover_balance IS 'N月繰越残高';
 
-COMMENT ON COLUMN if_zaim.if_zaim_income_amount IS '収入';
+COMMENT ON COLUMN if_rakuten_card.new_signup_flag IS '新規サイン';
 
-COMMENT ON COLUMN if_zaim.if_zaim_expense_amount IS '支出';
+COMMENT ON COLUMN if_rakuten_card.created_at IS '登録日時';
 
-COMMENT ON COLUMN if_zaim.if_zaim_transfer_amount IS '振替';
+COMMENT ON COLUMN if_rakuten_card.updated_at IS '更新日時';
 
-COMMENT ON COLUMN if_zaim.if_zaim_balance_amount IS '残高調整';
-
-COMMENT ON COLUMN if_zaim.if_zaim_before_amount IS '通貨変換前の金額';
-
-COMMENT ON COLUMN if_zaim.if_zaim_aggregation_settings IS '集計の設定';
-
-COMMENT ON COLUMN if_zaim.created_at IS '登録日時';
-
-COMMENT ON COLUMN if_zaim.updated_at IS '更新日時';
-
-CREATE TRIGGER if_zaim_upd_trigger BEFORE UPDATE ON public.if_zaim FOR EACH ROW EXECUTE PROCEDURE set_update_time();
+CREATE TRIGGER if_rakuten_card_upd_trigger BEFORE UPDATE ON public.if_rakuten_card FOR EACH ROW EXECUTE PROCEDURE set_update_time();
 
 CREATE TABLE category (
   category_cd serial,
@@ -366,35 +351,76 @@ COMMENT ON COLUMN fixed_cost.updated_at IS '更新日時';
 
 CREATE TRIGGER fixed_cost_upd_trigger BEFORE UPDATE ON public.fixed_cost FOR EACH ROW EXECUTE PROCEDURE set_update_time();
 
-CREATE TABLE m_user (
-  id serial,
-  name CHARACTER VARYING(100) NOT NULL,
-  email CHARACTER VARYING(100) NOT NULL,
-  roles CHARACTER VARYING(100) NOT NULL,
-  password CHARACTER VARYING(150) NOT NULL,
-  is_active BOOLEAN NOT NULL,
+CREATE TABLE category_mapping_config (
+  category_mapping_config_seq serial,
+  mapping_key_nm text,
+  category_cd integer,
+  linking_excluded_flg CHARACTER VARYING(1) DEFAULT '0',
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (id)
+  PRIMARY KEY (category_mapping_config_seq),
+  FOREIGN KEY (category_cd) REFERENCES category(category_cd)
 );
 
-COMMENT ON TABLE m_user IS 'ユーザマスタ';
+COMMENT ON TABLE category_mapping_config IS '連携データカテゴリ振り分け設定';
 
-COMMENT ON COLUMN m_user.name IS 'ユーザ名';
+COMMENT ON COLUMN category_mapping_config.category_mapping_config_seq IS '連携データカテゴリ振り分け設定Seq';
 
-COMMENT ON COLUMN m_user.email IS 'e-mail';
+COMMENT ON COLUMN category_mapping_config.mapping_key_nm IS '振り分けキー名称';
 
-COMMENT ON COLUMN m_user.roles IS 'ロール';
+COMMENT ON COLUMN category_mapping_config.category_cd IS 'カテゴリコード';
 
-COMMENT ON COLUMN m_user.password IS 'パスワード';
+COMMENT ON COLUMN category_mapping_config.linking_excluded_flg IS '連携対象外フラグ';
 
-COMMENT ON COLUMN m_user.is_active IS '有効';
+COMMENT ON COLUMN category_mapping_config.created_at IS '登録日時';
 
-COMMENT ON COLUMN m_user.created_at IS '登録日時';
+COMMENT ON COLUMN category_mapping_config.updated_at IS '更新日時';
 
-COMMENT ON COLUMN m_user.updated_at IS '更新日時';
+CREATE TRIGGER category_mapping_config_upd_trigger BEFORE UPDATE ON public.category_mapping_config FOR EACH ROW EXECUTE PROCEDURE set_update_time();
 
-CREATE TRIGGER m_user_upd_trigger BEFORE UPDATE ON public.m_user FOR EACH ROW EXECUTE PROCEDURE set_update_time();
+CREATE TABLE recurring_config (
+  recurring_config_seq serial,
+  recurring_nm text,
+  execution_interval_type CHARACTER VARYING(1),
+  category_cd INTEGER,
+  store_cd INTEGER,
+  amount numeric(8, 0),
+  remarks text,
+  linking_data_type INTEGER DEFAULT 0,
+  active_flg  CHARACTER VARYING(1) DEFAULT '1',
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (recurring_config_seq),
+  FOREIGN KEY (category_cd) REFERENCES category(category_cd),
+  FOREIGN KEY (store_cd) REFERENCES store(store_cd),
+  FOREIGN KEY (linking_data_type) REFERENCES linking_data(linking_data_type)
+);
+
+COMMENT ON TABLE recurring_config IS '繰り返し入力設定';
+
+COMMENT ON COLUMN recurring_config.recurring_config_seq IS '繰り返し入力設定Seq';
+
+COMMENT ON COLUMN recurring_config.recurring_nm IS '繰り返し入力名称';
+
+COMMENT ON COLUMN recurring_config.execution_interval_type IS '実行間隔種別（1：毎月1日）';
+
+COMMENT ON COLUMN recurring_config.category_cd IS 'カテゴリコード';
+
+COMMENT ON COLUMN recurring_config.store_cd IS '店コード';
+
+COMMENT ON COLUMN recurring_config.amount IS '金額';
+
+COMMENT ON COLUMN recurring_config.remarks IS '備考';
+
+COMMENT ON COLUMN recurring_config.linking_data_type IS '連携データタイプ（固定値0：繰り返し入力設定）';
+
+COMMENT ON COLUMN recurring_config.active_flg IS '有効フラグ';
+
+COMMENT ON COLUMN recurring_config.created_at IS '登録日時';
+
+COMMENT ON COLUMN recurring_config.updated_at IS '更新日時';
+
+CREATE TRIGGER recurring_config_upd_trigger BEFORE UPDATE ON public.recurring_config FOR EACH ROW EXECUTE PROCEDURE set_update_time();
 
 /**************************************/
 /*             CREATE VIEW           */
@@ -470,7 +496,7 @@ COMMENT ON COLUMN v_household_account_book.display_amount IS '表示用金額（
 
 COMMENT ON COLUMN v_household_account_book.remarks IS '備考';
 
-COMMENT ON COLUMN v_household_account_book.linking_data_type IS '連携データタイプ';
+COMMENT ON COLUMN v_household_account_book.3ing_data_type IS '連携データタイプ';
 
 CREATE OR REPLACE VIEW v_asset AS
 SELECT
