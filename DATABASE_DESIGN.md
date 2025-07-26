@@ -46,7 +46,7 @@ erDiagram
 
     asset {
         DATE asset_year_month PK
-        VARCHAR deposit_account_cd PK FK
+        VARCHAR deposit_account_cd PK
         NUMERIC asset_amount
         TEXT asset_remarks
     }
@@ -60,7 +60,7 @@ erDiagram
 
     investment_pl {
         DATE investment_pl_year_month PK
-        VARCHAR deposit_account_cd PK FK
+        VARCHAR deposit_account_cd PK
         NUMERIC investment_pl_amount
         TEXT investment_pl_remarks
     }
