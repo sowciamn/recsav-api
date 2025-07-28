@@ -38,6 +38,14 @@
 | POST | /api/stores | 店を登録する |
 | PUT | /api/stores/{storeCd} | 店を更新する |
 | DELETE | /api/stores/{storeCd} | 店を削除する |
+| GET | /api/category-mapping-configs | 連携データカテゴリ振り分け設定の一覧を取得する |
+| POST | /api/category-mapping-configs | 連携データカテゴリ振り分け設定を登録する |
+| PUT | /api/category-mapping-configs/{categoryMappingConfigSeq} | 連携データカテゴリ振り分け設定を更新する |
+| DELETE | /api/category-mapping-configs/{categoryMappingConfigSeq} | 連携データカテゴリ振り分け設定を削除する |
+| GET | /api/recurring-configs | 繰り返し入力設定の一覧を取得する |
+| POST | /api/recurring-configs | 繰り返し入力設定を登録する |
+| PUT | /api/recurring-configs/{recurringConfigSeq} | 繰り返し入力設定を更新する |
+| DELETE | /api/recurring-configs/{recurringConfigSeq} | 繰り返し入力設定を削除する |
 
 ## API詳細
 
@@ -742,3 +750,197 @@
   - `storeCd` (integer, required): 店コード
 
 - **レスポンス (204 No Content)**
+
+### 連携データカテゴリ振り分け設定 (Category Mapping Config)
+
+#### GET /api/category-mapping-configs
+
+連携データカテゴリ振り分け設定の一覧を取得します。
+
+- **レスポンス (200 OK)**
+
+```json
+[
+  {
+    "categoryMappingConfigSeq": 1,
+    "mappingKeyNm": "キー",
+    "categoryCd": 1,
+    "linkingExcludedFlg": "0",
+    "createdAt": "2023-07-09T12:00:00Z",
+    "updatedAt": "2023-07-09T12:00:00Z"
+  }
+]
+```
+
+#### POST /api/category-mapping-configs
+
+新しい連携データカテゴリ振り分け設定を登録します。
+
+- **リクエスト**
+
+```json
+{
+  "mappingKeyNm": "キー2",
+  "categoryCd": 2,
+  "linkingExcludedFlg": "1"
+}
+```
+
+- **レスポンス (201 Created)**
+
+```json
+{
+  "categoryMappingConfigSeq": 2,
+  "mappingKeyNm": "キー2",
+  "categoryCd": 2,
+  "linkingExcludedFlg": "1",
+  "createdAt": "2023-07-10T10:00:00Z",
+  "updatedAt": "2023-07-10T10:00:00Z"
+}
+```
+
+#### PUT /api/category-mapping-configs/{categoryMappingConfigSeq}
+
+指定した連携データカテゴリ振り分け設定を更新します。
+
+- **パスパラメータ**
+  - `categoryMappingConfigSeq` (integer, required): 連携データカテゴリ振り分け設定SEQ
+
+- **リクエスト**
+
+```json
+{
+  "mappingKeyNm": "キー更新",
+  "categoryCd": 3,
+  "linkingExcludedFlg": "0"
+}
+```
+
+- **レスポンス (200 OK)**
+
+```json
+{
+  "categoryMappingConfigSeq": 1,
+  "mappingKeyNm": "キー更新",
+  "categoryCd": 3,
+  "linkingExcludedFlg": "0",
+  "createdAt": "2023-07-09T12:00:00Z",
+  "updatedAt": "2023-07-10T11:00:00Z"
+}
+```
+
+#### DELETE /api/category-mapping-configs/{categoryMappingConfigSeq}
+
+指定した連携データカテゴリ振り分け設定を削除します。
+
+- **パスパラメータ**
+  - `categoryMappingConfigSeq` (integer, required): 連携データカテゴリ振り分け設定SEQ
+
+- **レスポンス (204 No Content)**
+
+### 繰り返し入力設定 (Recurring Config)
+
+#### GET /api/recurring-configs
+
+繰り返し入力設定の一覧を取得します。
+
+- **レスポンス (200 OK)**
+
+```json
+[
+  {
+    "recurringConfigSeq": 1,
+    "recurringNm": "家賃",
+    "executionIntervalType": "1",
+    "categoryCd": 1,
+    "storeCd": 1,
+    "amount": 80000,
+    "remarks": "毎月1日",
+    "linkingDataType": 0,
+    "activeFlg": "1",
+    "createdAt": "2023-07-09T12:00:00Z",
+    "updatedAt": "2023-07-09T12:00:00Z"
+  }
+]
+```
+
+#### POST /api/recurring-configs
+
+新しい繰り返し入力設定を登録します。
+
+- **リクエスト**
+
+```json
+{
+  "recurringNm": "サブスク",
+  "executionIntervalType": "1",
+  "categoryCd": 2,
+  "storeCd": 2,
+  "amount": 1000,
+  "remarks": "毎月1日",
+  "linkingDataType": 0,
+  "activeFlg": "1"
+}
+```
+
+- **レスポンス (201 Created)**
+
+```json
+{
+  "recurringConfigSeq": 2,
+  "recurringNm": "サブスク",
+  "executionIntervalType": "1",
+  "categoryCd": 2,
+  "storeCd": 2,
+  "amount": 1000,
+  "remarks": "毎月1日",
+  "linkingDataType": 0,
+  "activeFlg": "1",
+  "createdAt": "2023-07-10T10:00:00Z",
+  "updatedAt": "2023-07-10T10:00:00Z"
+}
+```
+
+#### PUT /api/recurring-configs/{recurringConfigSeq}
+
+指定した繰り返し入力設定を更新します。
+
+- **パスパラメータ**
+  - `recurringConfigSeq` (integer, required): 繰り返し入力設定SEQ
+
+- **リクエスト**
+
+```json
+{
+  "recurringNm": "家賃（更新）",
+  "amount": 85000
+}
+```
+
+- **レスポンス (200 OK)**
+
+```json
+{
+  "recurringConfigSeq": 1,
+  "recurringNm": "家賃（更新）",
+  "executionIntervalType": "1",
+  "categoryCd": 1,
+  "storeCd": 1,
+  "amount": 85000,
+  "remarks": "毎月1日",
+  "linkingDataType": 0,
+  "activeFlg": "1",
+  "createdAt": "2023-07-09T12:00:00Z",
+  "updatedAt": "2023-07-10T11:00:00Z"
+}
+```
+
+#### DELETE /api/recurring-configs/{recurringConfigSeq}
+
+指定した繰り返し入力設定を削除します。
+
+- **パスパラメータ**
+  - `recurringConfigSeq` (integer, required): 繰り返し入力設定SEQ
+
+- **レスポンス (204 No Content)**
+

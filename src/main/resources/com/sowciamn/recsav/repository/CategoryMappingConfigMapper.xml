@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sowciamn.recsav.repository.CategoryMappingConfigMapper">
+
+    <select id="findAll" resultType="com.sowciamn.recsav.model.entity.CategoryMappingConfig">
+        SELECT
+            category_mapping_config_seq,
+            mapping_key_nm,
+            category_cd,
+            linking_excluded_flg,
+            created_at,
+            updated_at
+        FROM
+            category_mapping_config
+        ORDER BY
+            category_mapping_config_seq
+    </select>
+
+    <select id="findById" resultType="com.sowciamn.recsav.model.entity.CategoryMappingConfig">
+        SELECT
+            category_mapping_config_seq,
+            mapping_key_nm,
+            category_cd,
+            linking_excluded_flg,
+            created_at,
+            updated_at
+        FROM
+            category_mapping_config
+        WHERE
+            category_mapping_config_seq = #{categoryMappingConfigSeq}
+    </select>
+
+    <insert id="insert" parameterType="com.sowciamn.recsav.model.entity.CategoryMappingConfig" useGeneratedKeys="true" keyProperty="categoryMappingConfigSeq">
+        INSERT INTO category_mapping_config (
+            mapping_key_nm,
+            category_cd,
+            linking_excluded_flg,
+            created_at,
+            updated_at
+        ) VALUES (
+            #{mappingKeyNm},
+            #{categoryCd},
+            #{linkingExcludedFlg},
+            NOW(),
+            NOW()
+        )
+    </insert>
+
+    <update id="update" parameterType="com.sowciamn.recsav.model.entity.CategoryMappingConfig">
+        UPDATE
+            category_mapping_config
+        SET
+            mapping_key_nm = #{mappingKeyNm},
+            category_cd = #{categoryCd},
+            linking_excluded_flg = #{linkingExcludedFlg},
+            updated_at = NOW()
+        WHERE
+            category_mapping_config_seq = #{categoryMappingConfigSeq}
+    </update>
+
+    <delete id="delete">
+        DELETE FROM
+            category_mapping_config
+        WHERE
+            category_mapping_config_seq = #{categoryMappingConfigSeq}
+    </delete>
+
+</mapper>

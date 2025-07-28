@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sowciamn.recsav.repository.RecurringConfigMapper">
+
+    <select id="findAll" resultType="com.sowciamn.recsav.model.entity.RecurringConfig">
+        SELECT
+            recurring_config_seq,
+            recurring_nm,
+            execution_interval_type,
+            category_cd,
+            store_cd,
+            amount,
+            remarks,
+            linking_data_type,
+            active_flg,
+            created_at,
+            updated_at
+        FROM
+            recurring_config
+        ORDER BY
+            recurring_config_seq
+    </select>
+
+    <select id="findById" resultType="com.sowciamn.recsav.model.entity.RecurringConfig">
+        SELECT
+            recurring_config_seq,
+            recurring_nm,
+            execution_interval_type,
+            category_cd,
+            store_cd,
+            amount,
+            remarks,
+            linking_data_type,
+            active_flg,
+            created_at,
+            updated_at
+        FROM
+            recurring_config
+        WHERE
+            recurring_config_seq = #{recurringConfigSeq}
+    </select>
+
+    <insert id="insert" parameterType="com.sowciamn.recsav.model.entity.RecurringConfig" useGeneratedKeys="true" keyProperty="recurringConfigSeq">
+        INSERT INTO recurring_config (
+            recurring_nm,
+            execution_interval_type,
+            category_cd,
+            store_cd,
+            amount,
+            remarks,
+            linking_data_type,
+            active_flg,
+            created_at,
+            updated_at
+        ) VALUES (
+            #{recurringNm},
+            #{executionIntervalType},
+            #{categoryCd},
+            #{storeCd},
+            #{amount},
+            #{remarks},
+            #{linkingDataType},
+            #{activeFlg},
+            NOW(),
+            NOW()
+        )
+    </insert>
+
+    <update id="update" parameterType="com.sowciamn.recsav.model.entity.RecurringConfig">
+        UPDATE
+            recurring_config
+        SET
+            recurring_nm = #{recurringNm},
+            execution_interval_type = #{executionIntervalType},
+            category_cd = #{categoryCd},
+            store_cd = #{storeCd},
+            amount = #{amount},
+            remarks = #{remarks},
+            linking_data_type = #{linkingDataType},
+            active_flg = #{activeFlg},
+            updated_at = NOW()
+        WHERE
+            recurring_config_seq = #{recurringConfigSeq}
+    </update>
+
+    <delete id="delete">
+        DELETE FROM
+            recurring_config
+        WHERE
+            recurring_config_seq = #{recurringConfigSeq}
+    </delete>
+
+</mapper>
